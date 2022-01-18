@@ -3,6 +3,7 @@
 #include "spse_stm8.h"
 
 /*#include "delay.h"*/
+//#include <cstdint>
 #include <stdio.h>
 #include "../lib/uart.c"
 
@@ -53,9 +54,11 @@ void setup(void)
 int main(void)
 {
     uint32_t time = 0;
+    uint32_t voltage = 0;
+    uint32_t temperature = 0;
 
     setup();
-    /*init_uart();*/
+    //init_uart();*/
     uint16_t ADCx = 0;
 
     while (1) {
@@ -64,7 +67,10 @@ int main(void)
             LED_TOGG; 
             time = milis();
             ADCx = ADC_get(ADC2_CHANNEL_4);
-            printf("value = %d \n", ADCx);
+            voltage = (uint32_t) 3300 * ADCx / 1024;
+            temperature = ((uint32_t) 33000 * ADCx -(uint32_t)4096000 + 19968/2) / 19968;
+
+            printf("value = %d, Voltage = %ldmV, temperature =%ld.%ld C \r \n", ADCx, voltage,temperature/10,temperature%10);
         }
 
         /*LED_FLIP; */
